@@ -5,6 +5,7 @@ import wci.intermediate.*;
 import wci.backend.*;
 import wci.message.*;
 import wci.util.CrossReferencer;
+import wci.util.ParseTreePrinter;
 
 import static wci.frontend.pascal.PascalTokenType.STRING;
 
@@ -42,6 +43,10 @@ public class Pascal {
             parser.parse();
             source.close();
             iCode = parser.getICode();
+            if (intermediate) {
+                ParseTreePrinter treePrinter = new ParseTreePrinter(System.out);
+                treePrinter.print(iCode);
+            }
             symTabStack = parser.getSymTabStack();
             if (xref) {
                 CrossReferencer crossReferencer = new CrossReferencer();
