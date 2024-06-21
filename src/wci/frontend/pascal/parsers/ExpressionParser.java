@@ -19,6 +19,9 @@ import wci.intermediate.icodeimpl.ICodeNodeTypeImpl;
 import static wci.intermediate.icodeimpl.ICodeNodeTypeImpl.*;
 
 public class ExpressionParser extends StatementParser {
+    // Synchronization set for starting an expression.
+    static final EnumSet<PascalTokenType> EXPR_START_SET = EnumSet.of(PLUS, MINUS, IDENTIFIER, INTEGER, REAL, STRING,
+            PascalTokenType.NOT, LEFT_PAREN);
 
     public ExpressionParser(PascalParserTD parent) {
         super(parent);
