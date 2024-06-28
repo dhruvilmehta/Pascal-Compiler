@@ -14,6 +14,7 @@ public class SymTabStackImpl
         extends ArrayList<SymTab>
         implements SymTabStack {
     private int currentNestingLevel; // current scope nesting level
+    private SymTabEntry programId; // entry for the main program id
 
     /**
      * Constructor.
@@ -55,21 +56,69 @@ public class SymTabStackImpl
     }
 
     /**
-     * Look up an existing symbol table entry throughout the stack.
-     * 
-     * @param name the name of the entry.
-     * @return the entry, or null if it does not exist.
-     */
-    public SymTabEntry lookup(String name) {
-        return lookupLocal(name);
-    }
-
-    /**
      * Getter for current nesting level
      * 
      * @return currentNestingLevel
      */
     public int getCurrentNestingLevel() {
         return currentNestingLevel;
+    }
+
+    /**
+     * Push a new symbol table onto the symbol table stack.
+     * 
+     * @return the pushed symbol table.
+     */
+    public SymTab push() {
+        SymTab symTab = SymTabFactory.createSymTab(++currentNestingLevel);
+        add(symTab);
+        return symTab;
+    }
+
+    /**
+     * Push a symbol table onto the symbol table stack.
+     * 
+     * @return the pushed symbol table.
+     */
+    public SymTab push(SymTab symTab) {
+        ++currentNestingLevel;
+        add(symTab);
+        return symTab;
+    }
+
+    /**
+     * Pop a symbol table off the symbol table stack.
+     * 
+     * @return the popped symbol table.
+     */
+    public SymTab pop() {
+        SymTab symTab = get(currentNestingLevel);
+        remove(currentNestingLevel--);
+        return symTab;
+    }
+
+    /**
+     * Look up an existing symbol table entry throughout the stack.
+     * 
+     * @param name the name of the entry.
+     * @return the entry, or null if it does not exist.
+     */
+    public SymTabEntry lookup(String name) {
+        SymTabEntry foundEntry = null;
+        // Search the current and enclosing scopes.
+        for (int i = currentNestingLevel; (i >= 0) && (foundEntry == null); --i) {
+            foundEntry = get(i).lookup(name);
+        }
+        return foundEntry;
+    }
+
+    @Override
+    public void setProgramId(SymTabEntry entry) {
+        this.programId=entry;
+    }
+
+    @Override
+    public SymTabEntry getProgramId() {
+        return programId;
     }
 }

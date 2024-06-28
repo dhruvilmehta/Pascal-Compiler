@@ -6,6 +6,7 @@ import wci.backend.*;
 import wci.message.*;
 import wci.util.CrossReferencer;
 import wci.util.ParseTreePrinter;
+import static wci.intermediate.symtabimpl.SymTabKeyImpl.*;
 
 import static wci.frontend.pascal.PascalTokenType.STRING;
 
@@ -42,17 +43,31 @@ public class Pascal {
             backend.addMessageListener(new BackendMessageListener());
             parser.parse();
             source.close();
-            iCode = parser.getICode();
-            if (intermediate) {
-                ParseTreePrinter treePrinter = new ParseTreePrinter(System.out);
-                treePrinter.print(iCode);
+            // iCode = parser.getICode();
+            // if (intermediate) {
+            // ParseTreePrinter treePrinter = new ParseTreePrinter(System.out);
+            // treePrinter.print(iCode);
+            // }
+            // symTabStack = parser.getSymTabStack();
+            // if (xref) {
+            // CrossReferencer crossReferencer = new CrossReferencer();
+            // crossReferencer.print(symTabStack);
+            // }
+            // backend.process(iCode, symTabStack);
+            if (parser.getErrorCount() == 0) {
+                symTabStack = parser.getSymTabStack();
+                SymTabEntry programId = symTabStack.getProgramId();
+                iCode = (ICode) programId.getAttribute(ROUTINE_ICODE);
+                if (xref) {
+                    CrossReferencer crossReferencer = new CrossReferencer();
+                    crossReferencer.print(symTabStack);
+                }
+                if (intermediate) {
+                    ParseTreePrinter treePrinter = new ParseTreePrinter(System.out);
+                    treePrinter.print(symTabStack);
+                }
+                backend.process(iCode, symTabStack);
             }
-            symTabStack = parser.getSymTabStack();
-            if (xref) {
-                CrossReferencer crossReferencer = new CrossReferencer();
-                crossReferencer.print(symTabStack);
-            }
-            backend.process(iCode, symTabStack);
         } catch (Exception ex) {
             System.out.println("***** Internal translator error. *****");
             ex.printStackTrace();
@@ -210,6 +225,7 @@ public class Pascal {
      */
     private class BackendMessageListener implements MessageListener {
         private boolean firstOutputMessage = true;
+
         /**
          * Called by the back end whenever it produces a message.
          * 

@@ -5,9 +5,11 @@ BEGIN {FOR statements}
 
     FOR k := n DOWNTO 1 DO j := k;
 
-    FOR i := 1 TO 2 DO BEGIN
-        FOR j := 1 TO 3 DO BEGIN
-            k := i*j
+    FOR i := 1 TO 2 DO 
+        BEGIN
+            FOR j := 1 TO 3 DO 
+                BEGIN
+                    k := i*j
+                END
         END
-    END
 END.

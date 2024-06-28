@@ -17,6 +17,8 @@ public class SymTabEntryImpl
     private String name; // entry name
     private SymTab symTab; // parent symbol table
     private ArrayList<Integer> lineNumbers; // source line numbers
+    private Definition definition; // how the identifier is defined
+    private TypeSpec typeSpec; // type specification
 
     /**
      * Constructor.
@@ -70,4 +72,25 @@ public class SymTabEntryImpl
     public ArrayList<Integer> getLineNumbers() {
         return lineNumbers;
     }
+
+    @Override
+    public void setDefinition(Definition definition) {
+        this.definition = definition;
+    }
+
+    @Override
+    public Definition getDefinition() {
+        return definition;
+    }
+
+    @Override
+    public void setTypeSpec(TypeSpec typeSpec) {
+        this.typeSpec = typeSpec;
+    }
+
+    @Override
+    public TypeSpec getTypeSpec() {
+        return typeSpec;
+    }
+
 }

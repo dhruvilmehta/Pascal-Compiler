@@ -1,8 +1,11 @@
 package wci.frontend.pascal;
 
 import wci.frontend.*;
-import wci.frontend.pascal.parsers.StatementParser;
+import wci.frontend.pascal.parsers.BlockParser;
 import wci.intermediate.*;
+import wci.intermediate.symtabimpl.DefinitionImpl;
+import wci.intermediate.symtabimpl.Predefined;
+import static wci.intermediate.symtabimpl.SymTabKeyImpl.*;
 import wci.message.*;
 
 import static wci.frontend.pascal.PascalTokenType.*;
@@ -46,6 +49,8 @@ public class PascalParserTD extends Parser {
         super(parent.getScanner());
     }
 
+    private SymTabEntry routineId; // name of the routine being parsed
+
     /**
      * Parse a Pascal source program and generate the symbol table
      * and the intermediate code.
@@ -55,27 +60,30 @@ public class PascalParserTD extends Parser {
     public void parse()
             throws Exception {
         long startTime = System.currentTimeMillis();
-        iCode = ICodeFactory.createICode();
+        ICode iCode = ICodeFactory.createICode();
+        Predefined.initialize(symTabStack);
+        Predefined.initialize(symTabStack);
+        // Create a dummy program identifier symbol table entry.
+        routineId = symTabStack.enterLocal("DummyProgramName".toLowerCase());
+        routineId.setDefinition(DefinitionImpl.PROGRAM);
+        symTabStack.setProgramId(routineId);
+        // Push a new symbol table onto the symbol table stack and set
+        // the routine's symbol table and intermediate code.
+        routineId.setAttribute(ROUTINE_SYMTAB, symTabStack.push());
+        routineId.setAttribute(ROUTINE_ICODE, iCode);
+        BlockParser blockParser = new BlockParser(this);
         try {
             Token token = nextToken();
-            ICodeNode rootNode = null;
-            // Look for the BEGIN token to parse a compound statement.
-            if (token.getType() == BEGIN) {
-                StatementParser statementParser = new StatementParser(this);
-                rootNode = statementParser.parse(token);
-                token = currentToken();
-            } else {
-                errorHandler.flag(token, UNEXPECTED_TOKEN, this);
-            }
+            // Parse a block.
+            ICodeNode rootNode = blockParser.parse(token, routineId);
+            iCode.setRoot(rootNode);
+            symTabStack.pop();
             // Look for the final period.
+            token = currentToken();
             if (token.getType() != DOT) {
                 errorHandler.flag(token, MISSING_PERIOD, this);
             }
             token = currentToken();
-            // Set the parse tree root node.
-            if (rootNode != null) {
-                iCode.setRoot(rootNode);
-            }
             // Send the parser summary message.
             float elapsedTime = (System.currentTimeMillis() - startTime) / 1000f;
             sendMessage(new Message(PARSER_SUMMARY,
@@ -95,7 +103,7 @@ public class PascalParserTD extends Parser {
      * @return the token where the parser has synchronized.
      * @throws Exception if an error occurred.
      */
-    public Token synchronize(EnumSet syncSet)
+    public Token synchronize(EnumSet<PascalTokenType> syncSet)
             throws Exception {
         Token token = currentToken();
         // If the current token is not in the synchronization set,
