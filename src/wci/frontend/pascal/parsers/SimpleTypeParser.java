@@ -40,8 +40,6 @@ public class SimpleTypeParser extends TypeSpecificationParser {
     public TypeSpec parse(Token token)
             throws Exception {
         // Synchronize at the start of a simple type specification.
-        // System.out.println(token.getType()+" "+token.getText());
-        // System.out.println("Hi");
         token = synchronize(SIMPLE_TYPE_START_SET);
         switch ((PascalTokenType) token.getType()) {
             case IDENTIFIER: {

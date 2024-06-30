@@ -53,7 +53,6 @@ public class SubrangeTypeParser extends TypeSpecificationParser {
         Token constantToken = token;
         ConstantDefinitionsParser constantParser = new ConstantDefinitionsParser(this);
         minValue = constantParser.parseConstant(token);
-        // System.out.println(constantToken.getText()+" here");
         // Set the minimum constant's type.
         TypeSpec minType = constantToken.getType() == IDENTIFIER
                 ? constantParser.getConstantType(constantToken)

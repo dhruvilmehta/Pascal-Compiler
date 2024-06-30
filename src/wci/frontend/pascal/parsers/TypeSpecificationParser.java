@@ -12,7 +12,7 @@ import wci.intermediate.TypeSpec;
 /**
  * TypeSpecificationsParser
  */
-public class TypeSpecificationParser extends PascalParserTD{
+public class TypeSpecificationParser extends PascalParserTD {
     public TypeSpecificationParser(PascalParserTD parent) {
         super(parent);
     }
@@ -35,7 +35,6 @@ public class TypeSpecificationParser extends PascalParserTD{
     public TypeSpec parse(Token token)
             throws Exception {
         // Synchronize at the start of a type specification.
-        System.out.println(token.getType()+" "+token.getText());
         token = synchronize(TYPE_START_SET);
         switch ((PascalTokenType) token.getType()) {
             case ARRAY: {
