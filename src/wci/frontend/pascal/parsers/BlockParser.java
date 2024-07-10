@@ -14,7 +14,7 @@ import wci.intermediate.SymTabEntry;
 /**
  * BlockParser
  */
-public class BlockParser extends PascalParserTD{
+public class BlockParser extends PascalParserTD {
 
     public BlockParser(PascalParserTD parent) {
         super(parent);
@@ -33,7 +33,7 @@ public class BlockParser extends PascalParserTD{
         DeclarationsParser declarationsParser = new DeclarationsParser(this);
         StatementParser statementParser = new StatementParser(this);
         // Parse any declarations.
-        declarationsParser.parse(token);
+        declarationsParser.parse(token, routineId);
         token = synchronize(StatementParser.STMT_START_SET);
         TokenType tokenType = token.getType();
         ICodeNode rootNode = null;

@@ -145,6 +145,7 @@ public class TypeChecker {
         }
         // One integer and one real.
         else if (isAtLeastOneReal(type1, type2)) {
+            compatible=true;
         }
         // Two strings.
         else {

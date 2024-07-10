@@ -2,6 +2,7 @@ package wci.frontend.pascal;
 
 import wci.frontend.*;
 import wci.frontend.pascal.parsers.BlockParser;
+import wci.frontend.pascal.parsers.ProgramParser;
 import wci.intermediate.*;
 import wci.intermediate.symtabimpl.DefinitionImpl;
 import wci.intermediate.symtabimpl.Predefined;
@@ -60,29 +61,12 @@ public class PascalParserTD extends Parser {
     public void parse()
             throws Exception {
         long startTime = System.currentTimeMillis();
-        ICode iCode = ICodeFactory.createICode();
         Predefined.initialize(symTabStack);
-        Predefined.initialize(symTabStack);
-        // Create a dummy program identifier symbol table entry.
-        routineId = symTabStack.enterLocal("DummyProgramName".toLowerCase());
-        routineId.setDefinition(DefinitionImpl.PROGRAM);
-        symTabStack.setProgramId(routineId);
-        // Push a new symbol table onto the symbol table stack and set
-        // the routine's symbol table and intermediate code.
-        routineId.setAttribute(ROUTINE_SYMTAB, symTabStack.push());
-        routineId.setAttribute(ROUTINE_ICODE, iCode);
-        BlockParser blockParser = new BlockParser(this);
         try {
             Token token = nextToken();
-            // Parse a block.
-            ICodeNode rootNode = blockParser.parse(token, routineId);
-            iCode.setRoot(rootNode);
-            symTabStack.pop();
-            // Look for the final period.
-            token = currentToken();
-            if (token.getType() != DOT) {
-                errorHandler.flag(token, MISSING_PERIOD, this);
-            }
+            // Parse a program.
+            ProgramParser programParser = new ProgramParser(this);
+            programParser.parse(token, null);
             token = currentToken();
             // Send the parser summary message.
             float elapsedTime = (System.currentTimeMillis() - startTime) / 1000f;

@@ -64,6 +64,35 @@ public abstract class Scanner {
     }
 
     /**
+     * Skips the rest of the line and goes to the next line
+     * Takes the currentPos to line.length() + 1, i.e, at the end of the line(EOL)
+     * @throws Exception
+     */
+    public void skipToNextLine() throws Exception{
+        source.skipToNextLine();
+    }
+
+    /**
+     * Checks if the source is at the end of file(EOF)
+     * 
+     * @throws Exception if an error occurred.
+     */
+    public boolean atEof()
+            throws Exception {
+        return source.atEof();
+    }
+
+    /**
+     * Checks if the source is at the end of line(EOL)
+     * 
+     * @throws Exception if an error occurred.
+     */
+    public boolean atEol()
+            throws Exception {
+        return source.atEol();
+    }
+
+    /**
      * Call the source's nextChar() method.
      * 
      * @return the next character from the source.

@@ -1,21 +1,41 @@
 package wci.frontend.pascal.parsers;
 
 import java.util.EnumSet;
+import java.util.ArrayList;
 
-import wci.frontend.Token;
-import wci.frontend.pascal.PascalParserTD;
-import wci.frontend.pascal.PascalTokenType;
-import static wci.frontend.pascal.PascalTokenType.END;
-import static wci.frontend.pascal.PascalTokenType.SEMICOLON;
-import static wci.frontend.pascal.PascalErrorCode.MISSING_END;
-import wci.intermediate.TypeFactory;
-import wci.intermediate.TypeSpec;
-import static wci.intermediate.typeimpl.TypeKeyImpl.*;
-import static wci.intermediate.typeimpl.TypeFormImpl.*;
+import wci.frontend.*;
+import wci.frontend.pascal.*;
+import wci.intermediate.*;
+import wci.intermediate.symtabimpl.*;
+
+import static wci.frontend.pascal.PascalTokenType.*;
+import static wci.frontend.pascal.PascalErrorCode.*;
+import static wci.intermediate.symtabimpl.SymTabKeyImpl.*;
 import static wci.intermediate.symtabimpl.DefinitionImpl.*;
+import static wci.intermediate.typeimpl.TypeFormImpl.RECORD;
+import static wci.intermediate.typeimpl.TypeKeyImpl.*;
 
-public class RecordTypeParser extends TypeSpecificationParser {
-    public RecordTypeParser(PascalParserTD parent) {
+/**
+ * <h1>RecordTypeParser</h1>
+ *
+ * <p>
+ * Parse a Pascal record type specification.
+ * </p>
+ *
+ * <p>
+ * Copyright (c) 2009 by Ronald Mak
+ * </p>
+ * <p>
+ * For instructional purposes only. No warranties.
+ * </p>
+ */
+class RecordTypeParser extends TypeSpecificationParser {
+    /**
+     * Constructor.
+     * 
+     * @param parent the parent parser.
+     */
+    protected RecordTypeParser(PascalParserTD parent) {
         super(parent);
     }
 
@@ -37,22 +57,28 @@ public class RecordTypeParser extends TypeSpecificationParser {
             throws Exception {
         TypeSpec recordType = TypeFactory.createType(RECORD);
         token = nextToken(); // consume RECORD
+
         // Push a symbol table for the RECORD type specification.
         recordType.setAttribute(RECORD_SYMTAB, symTabStack.push());
+
         // Parse the field declarations.
         VariableDeclarationsParser variableDeclarationsParser = new VariableDeclarationsParser(this);
         variableDeclarationsParser.setDefinition(FIELD);
-        variableDeclarationsParser.parse(token);
+        variableDeclarationsParser.parse(token, null);
+
         // Pop off the record's symbol table.
         symTabStack.pop();
+
         // Synchronize at the END.
         token = synchronize(END_SET);
+
         // Look for the END.
         if (token.getType() == END) {
             token = nextToken(); // consume END
         } else {
             errorHandler.flag(token, MISSING_END, this);
         }
+
         return recordType;
     }
 }

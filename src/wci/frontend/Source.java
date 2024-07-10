@@ -123,6 +123,45 @@ public class Source implements MessageProducer {
     }
 
     /**
+     * Skip the rest of the current input line
+     * by forcing the next read to read a new line.
+     * 
+     * @throws Exception if an error occurred.
+     */
+    public void skipToNextLine()
+            throws Exception {
+        if (line != null) {
+            currentPos = line.length() + 1;
+        }
+    }
+
+    /**
+     * Checks if the source is at the end of file(EOF)
+     * 
+     * @throws Exception if an error occurred.
+     */
+    public boolean atEof()
+            throws Exception {
+        if (currentPos == -2) { // if visiting for the first time
+            readLine();
+        }
+        return line == null;
+    }
+
+    /**
+     * Checks if the source is at the end of line(EOL)
+     * 
+     * @throws Exception if an error occurred.
+     */
+    public boolean atEol()
+            throws Exception {
+        if (currentPos == -2) { // if visiting for the first time
+            readLine();
+        }
+        return line == null;
+    }
+
+    /**
      * Close the source.
      * 
      * @throws Exception if an error occurred.
