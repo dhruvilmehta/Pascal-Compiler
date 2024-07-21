@@ -22,7 +22,7 @@ public abstract class Backend implements MessageProducer
     }
 
     protected SymTab symTab;  // symbol table
-    protected SymTabStack symTabStack;  // symbol table stack
+    protected static SymTabStack symTabStack;  // symbol table stack
     protected ICode iCode;    // intermediate code
 
     /**

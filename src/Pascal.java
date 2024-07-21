@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import wci.frontend.*;
 import wci.intermediate.*;
@@ -35,11 +36,12 @@ public class Pascal {
     /**
      * Compile or interpret a Pascal source program.
      * 
-     * @param operation either "compile" or "execute".
-     * @param filePath  the source file path.
-     * @param flags     the command line flags.
+     * @param operation  either "compile" or "execute".
+     * @param sourcePath the source file path.
+     * @param inputPath  the input file path.
+     * @param flags      the command line flags.
      */
-    public Pascal(String operation, String filePath, String flags) {
+    public Pascal(String operation, String sourcePath, String inputPath, String flags) {
         try {
             intermediate = flags.indexOf('i') > -1;
             xref = flags.indexOf('x') > -1;
@@ -48,11 +50,11 @@ public class Pascal {
             fetch = flags.indexOf('f') > -1;
             call = flags.indexOf('c') > -1;
             returnn = flags.indexOf('r') > -1;
-            source = new Source(new BufferedReader(new FileReader(filePath)));
+            source = new Source(new BufferedReader(new FileReader(sourcePath)));
             source.addMessageListener(new SourceMessageListener());
             parser = FrontendFactory.createParser("Pascal", "top-down", source);
             parser.addMessageListener(new ParserMessageListener());
-            backend = BackendFactory.createBackend(operation);
+            backend = BackendFactory.createBackend(operation, inputPath);
             backend.addMessageListener(new BackendMessageListener());
             parser.parse();
             source.close();
@@ -76,7 +78,7 @@ public class Pascal {
         }
     }
 
-    private static final String FLAGS = "[-ix]";
+    private static final String FLAGS = "[-ixlafcr]";
     private static final String USAGE = "Usage: Pascal execute|compile " + FLAGS + " <source file path>";
 
     /**
@@ -84,7 +86,9 @@ public class Pascal {
      * 
      * @param args command-line
      *             arguments: "compile" or "execute" followed by
-     *             optional flags followed by the source file path.
+     *             optional flags followed by the source file path
+     *             followed by
+     *             an optional runtime input data file path.
      */
     public static void main(String args[]) {
         try {
@@ -100,13 +104,25 @@ public class Pascal {
             while ((++i < args.length) && (args[i].charAt(0) == '-')) {
                 flags += args[i].substring(1);
             }
+            String sourcePath = null;
+            String inputPath = null;
             // Source path.
             if (i < args.length) {
-                String path = args[i];
-                new Pascal(operation, path, flags);
+                sourcePath = args[i];
             } else {
                 throw new Exception();
             }
+            // Runtime input data file path.
+            if (++i < args.length) {
+                inputPath = args[i];
+                File inputFile = new File(inputPath);
+                if (!inputFile.exists()) {
+                    System.out.println("Input file '" + inputPath +
+                            "' does not exist.");
+                    throw new Exception();
+                }
+            }
+            new Pascal(operation, sourcePath, inputPath, flags);
         } catch (Exception ex) {
             System.out.println(USAGE);
         }
@@ -138,13 +154,11 @@ public class Pascal {
         }
     }
 
-    private static final String PARSER_SUMMARY_FORMAT = "\n%,20d source lines." +
-            "\n%,20d syntax errors." +
-            "\n%,20.2f seconds total parsing time.\n";
-
     private static final String TOKEN_FORMAT = ">>> %-15s line=%03d, pos=%2d, text=\"%s\"";
     private static final String VALUE_FORMAT = ">>> value=%s";
     private static final int PREFIX_WIDTH = 5;
+    private static final String PARSER_SUMMARY_FORMAT = "%,d source lines, %,d syntax errors, " +
+            "%,.2f seconds total parsing time.\n";
 
     /**
      * Listener for parser messages.
@@ -195,18 +209,11 @@ public class Pascal {
                     int position = (Integer) body[1];
                     String tokenText = (String) body[2];
                     String errorMessage = (String) body[3];
-                    int spaceCount = PREFIX_WIDTH + position;
                     StringBuilder flagBuffer = new StringBuilder();
-                    // Spaces up to the error position.
-                    for (int i = 1; i < spaceCount; ++i) {
-                        flagBuffer.append(' ');
-                    }
-                    // A pointer to the error followed by the error message.
-                    flagBuffer.append("^\n*** ").append(errorMessage);
-                    // Text, if any, of the bad token.
+                    flagBuffer.append(String.format("%d: %s", lineNumber, errorMessage));
+                    // Text, if any, of the badtoken.
                     if (tokenText != null) {
-                        flagBuffer.append(" [at \"").append(tokenText)
-                                .append("\"]");
+                        flagBuffer.append(" [at \"").append(tokenText).append("\"]");
                     }
                     System.out.println(flagBuffer.toString());
                     break;
@@ -215,9 +222,8 @@ public class Pascal {
         }
     }
 
-    private static final String INTERPRETER_SUMMARY_FORMAT = "\n%,20d statements executed." +
-            "\n%,20d runtime errors." +
-            "\n%,20.2f seconds total execution time.\n";
+    private static final String INTERPRETER_SUMMARY_FORMAT = "%,d statements executed, %,d runtime errors, " +
+            "%,.2f seconds total execution time.\n";
     private static final String COMPILER_SUMMARY_FORMAT = "\n%,20d instructions generated." +
             "\n%,20.2f seconds total code generation time.\n";
     private static final String LINE_FORMAT = ">>> AT LINE %03d\n";

@@ -30,7 +30,7 @@ public class PascalWordToken extends PascalToken {
         text = textBuffer.toString();
         // Is it a reserved word or an identifier?
         type = (RESERVED_WORDS.contains(text.toLowerCase()))
-                ? PascalTokenType.valueOf(text.toUpperCase()) // reserved word
-                : IDENTIFIER; // identifier
+        ? PascalTokenType.valueOf(text.toUpperCase()) // reserved word
+        : IDENTIFIER; // identifier
     }
 }

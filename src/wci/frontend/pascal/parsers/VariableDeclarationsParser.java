@@ -178,6 +178,10 @@ public class VariableDeclarationsParser extends DeclarationsParser {
                 id = symTabStack.enterLocal(name);
                 id.setDefinition(definition);
                 id.appendLineNumber(token.getLineNumber());
+
+                // Set its slot number in the local variables array.
+                int slot = id.getSymTab().nextSlotNumber();
+                id.setAttribute(SLOT, slot);
             } else {
                 errorHandler.flag(token, IDENTIFIER_REDEFINED, this);
             }

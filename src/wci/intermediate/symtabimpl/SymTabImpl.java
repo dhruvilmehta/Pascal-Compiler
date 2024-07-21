@@ -17,9 +17,13 @@ public class SymTabImpl
         extends TreeMap<String, SymTabEntry>
         implements SymTab {
     private int nestingLevel;
+    private int slotNumber; // local variables array slot number
+    private int maxSlotNumber; // max slot number value
 
     public SymTabImpl(int nestingLevel) {
         this.nestingLevel = nestingLevel;
+        this.slotNumber = -1;
+        this.maxSlotNumber = 0;
     }
 
     /**
@@ -60,5 +64,20 @@ public class SymTabImpl
 
     public int getNestingLevel() {
         return nestingLevel;
+    }
+
+    /**
+     * @return the next local variables array slot number.
+     */
+    public int nextSlotNumber() {
+        maxSlotNumber = ++slotNumber;
+        return slotNumber;
+    }
+
+    /**
+     * @return the maximum local variables array slot number.
+     */
+    public int maxSlotNumber() {
+        return maxSlotNumber;
     }
 }

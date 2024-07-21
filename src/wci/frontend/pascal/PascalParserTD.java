@@ -1,15 +1,10 @@
 package wci.frontend.pascal;
 
 import wci.frontend.*;
-import wci.frontend.pascal.parsers.BlockParser;
 import wci.frontend.pascal.parsers.ProgramParser;
 import wci.intermediate.*;
-import wci.intermediate.symtabimpl.DefinitionImpl;
 import wci.intermediate.symtabimpl.Predefined;
-import static wci.intermediate.symtabimpl.SymTabKeyImpl.*;
 import wci.message.*;
-
-import static wci.frontend.pascal.PascalTokenType.*;
 import static wci.frontend.pascal.PascalErrorCode.*;
 import static wci.message.MessageType.PARSER_SUMMARY;
 

@@ -37,4 +37,14 @@ public interface SymTab {
      * @return a list of symbol table entries sorted by name.
      */
     public ArrayList<SymTabEntry> sortedEntries();
+
+    /**
+     * @return the next local variables array slot number.
+     */
+    public int nextSlotNumber();
+
+    /**
+     * @return the maximum local variables array slot number.
+     */
+    public int maxSlotNumber();
 }

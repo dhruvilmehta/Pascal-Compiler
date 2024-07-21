@@ -155,10 +155,7 @@ public class Source implements MessageProducer {
      */
     public boolean atEol()
             throws Exception {
-        if (currentPos == -2) { // if visiting for the first time
-            readLine();
-        }
-        return line == null;
+        return line!=null && currentPos==line.length();
     }
 
     /**

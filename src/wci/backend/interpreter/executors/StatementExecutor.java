@@ -29,7 +29,7 @@ public class StatementExecutor extends Executor {
      * @param the parent executor.
      */
     public StatementExecutor(Executor parent) {
-        // super(parent);
+        super(parent);
     }
 
     /**
