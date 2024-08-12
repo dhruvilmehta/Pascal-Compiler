@@ -1,3 +1,5 @@
+Notes: https://ripple-hardboard-566.notion.site/Notes-d7d25793fa0843e18cca7444c3e755e0
+
 Compile code: javac -d classes $(find src -name "*.java")
 Note: Code is already compiled if you see a classes/ directory. No need to use this command then.
 
