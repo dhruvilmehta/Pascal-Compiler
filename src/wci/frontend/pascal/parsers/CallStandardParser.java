@@ -325,8 +325,7 @@ public class CallStandardParser extends CallParser {
         // The function return type is integer.
         if (checkParmCount(token, parmsNode, 1)) {
             TypeSpec argType = parmsNode.getChildren().get(0).getTypeSpec().baseType();
-            if ((argType == Predefined.charType) ||
-                    (argType.getForm() == ENUMERATION)) {
+            if ((argType == Predefined.charType) || (argType.getForm() == ENUMERATION)) {
                 callNode.setTypeSpec(Predefined.integerType);
             } else {
                 errorHandler.flag(token, INVALID_TYPE, this);

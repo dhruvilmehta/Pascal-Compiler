@@ -51,6 +51,7 @@ public class DeclaredRoutineParser extends DeclarationsParser {
         String dummyName = null;
         SymTabEntry routineId = null;
         TokenType routineType = token.getType();
+        System.out.println(routineType);
         // Initialize.
         switch ((PascalTokenType) routineType) {
             case PROGRAM: {

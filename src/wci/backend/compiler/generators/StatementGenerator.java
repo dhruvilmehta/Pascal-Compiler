@@ -12,10 +12,10 @@ public class StatementGenerator extends CodeGenerator {
 
     /**
      * Constructor.
+     * 
      * @param the parent executor.
      */
-    public StatementGenerator(CodeGenerator parent)
-    {
+    public StatementGenerator(CodeGenerator parent) {
         super(parent);
     }
 
@@ -44,6 +44,26 @@ public class StatementGenerator extends CodeGenerator {
             case ASSIGN: {
                 AssignmentGenerator assignmentGenerator = new AssignmentGenerator(this);
                 assignmentGenerator.generate(node);
+                break;
+            }
+            case CALL: {
+                CallGenerator callGenerator = new CallGenerator(this);
+                callGenerator.generate(node);
+                break;
+            }
+            case LOOP: {
+                LoopGenerator loopGenerator = new LoopGenerator(this);
+                loopGenerator.generate(node);
+                break;
+            }
+            case IF: {
+                IfGenerator ifGenerator = new IfGenerator(this);
+                ifGenerator.generate(node);
+                break;
+            }
+            case SELECT: {
+                SelectGenerator selectGenerator = new SelectGenerator(this);
+                selectGenerator.generate(node);
                 break;
             }
         }

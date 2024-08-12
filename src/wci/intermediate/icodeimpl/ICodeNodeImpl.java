@@ -74,15 +74,19 @@ public class ICodeNodeImpl
      * @return the copy.
      */
     public ICodeNode copy() {
-        // Create a copy with the same type.
+        // Create a copy with the same type and type specification.
         ICodeNodeImpl copy = (ICodeNodeImpl) ICodeFactory.createICodeNode(type);
+        copy.setTypeSpec(typeSpec);
+
         Set<Map.Entry<ICodeKey, Object>> attributes = entrySet();
         Iterator<Map.Entry<ICodeKey, Object>> it = attributes.iterator();
+
         // Copy attributes
         while (it.hasNext()) {
             Map.Entry<ICodeKey, Object> attribute = it.next();
             copy.put(attribute.getKey(), attribute.getValue());
         }
+
         return copy;
     }
 
@@ -102,12 +106,12 @@ public class ICodeNodeImpl
 
     @Override
     public ArrayList<ICodeNode> getChildren() {
-        return children; 
+        return children;
     }
 
     @Override
     public void setTypeSpec(TypeSpec typeSpec) {
-        this.typeSpec=typeSpec;
+        this.typeSpec = typeSpec;
     }
 
     @Override

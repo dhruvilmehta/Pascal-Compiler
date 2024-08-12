@@ -143,13 +143,13 @@ public class Pascal {
             MessageType type = message.getType();
             Object body[] = (Object[]) message.getBody();
             switch (type) {
-                case SOURCE_LINE: {
-                    int lineNumber = (Integer) body[0];
-                    String lineText = (String) body[1];
-                    System.out.println(String.format(SOURCE_LINE_FORMAT,
-                            lineNumber, lineText));
-                    break;
-                }
+                // case SOURCE_LINE: {
+                //     int lineNumber = (Integer) body[0];
+                //     String lineText = (String) body[1];
+                //     System.out.println(String.format(SOURCE_LINE_FORMAT,
+                //             lineNumber, lineText));
+                //     break;
+                // }
             }
         }
     }
@@ -157,8 +157,8 @@ public class Pascal {
     private static final String TOKEN_FORMAT = ">>> %-15s line=%03d, pos=%2d, text=\"%s\"";
     private static final String VALUE_FORMAT = ">>> value=%s";
     private static final int PREFIX_WIDTH = 5;
-    private static final String PARSER_SUMMARY_FORMAT = "%,d source lines, %,d syntax errors, " +
-            "%,.2f seconds total parsing time.\n";
+    private static final String PARSER_SUMMARY_FORMAT = "\n%,20d source lines,\n %,20d syntax errors, " +
+            "\n%,20.2f seconds total parsing time.\n";
 
     /**
      * Listener for parser messages.
@@ -172,16 +172,16 @@ public class Pascal {
         public void messageReceived(Message message) {
             MessageType type = message.getType();
             switch (type) {
-                case PARSER_SUMMARY: {
-                    Number body[] = (Number[]) message.getBody();
-                    int statementCount = (Integer) body[0];
-                    int syntaxErrors = (Integer) body[1];
-                    float elapsedTime = (Float) body[2];
-                    System.out.printf(PARSER_SUMMARY_FORMAT,
-                            statementCount, syntaxErrors,
-                            elapsedTime);
-                    break;
-                }
+                // case PARSER_SUMMARY: {
+                //     Number body[] = (Number[]) message.getBody();
+                //     int statementCount = (Integer) body[0];
+                //     int syntaxErrors = (Integer) body[1];
+                //     float elapsedTime = (Float) body[2];
+                //     System.out.printf(PARSER_SUMMARY_FORMAT,
+                //             statementCount, syntaxErrors,
+                //             elapsedTime);
+                //     break;
+                // }
                 case TOKEN: {
                     Object body[] = (Object[]) message.getBody();
                     int line = (Integer) body[0];
@@ -222,8 +222,8 @@ public class Pascal {
         }
     }
 
-    private static final String INTERPRETER_SUMMARY_FORMAT = "%,d statements executed, %,d runtime errors, " +
-            "%,.2f seconds total execution time.\n";
+    private static final String INTERPRETER_SUMMARY_FORMAT = "\n%,20d statements executed,\n %,20d runtime errors, " +
+            "\n %,20.2f seconds total execution time.\n";
     private static final String COMPILER_SUMMARY_FORMAT = "\n%,20d instructions generated." +
             "\n%,20.2f seconds total code generation time.\n";
     private static final String LINE_FORMAT = ">>> AT LINE %03d\n";

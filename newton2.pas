@@ -20,20 +20,20 @@ FUNCTION root(x : real) : real;
 
 PROCEDURE print(n : integer; root : real);
     BEGIN
-        writeln('The square root of ', number:4, ' is ', root:8:4);
+        dwriteln('The square root of ', number:4, ' is ', root:8:4);
     END;
 
 BEGIN
     REPEAT
-        writeln;
-        write('Enter new number (0 to quit): ');
-        read(number);
+        dwriteln;
+        dwrite('Enter new number (0 to quit): ');
+        dread(number);
 
         IF number = 0 THEN BEGIN
             print(number, 0.0);
         END
         ELSE IF number < 0 THEN BEGIN
-            writeln('*** ERROR:  number < 0');
+            dwriteln('*** ERROR:  number < 0');
         END
         ELSE BEGIN
             print(number, root(number));

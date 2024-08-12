@@ -62,8 +62,7 @@ public class Executor extends Backend {
         } catch (IOException ignored) {
         }
 
-        debugger = BackendFactory.createDebugger(COMMAND_LINE, this,
-                runtimeStack);
+        // debugger = BackendFactory.createDebugger(COMMAND_LINE, this, runtimeStack);
     }
 
     /**

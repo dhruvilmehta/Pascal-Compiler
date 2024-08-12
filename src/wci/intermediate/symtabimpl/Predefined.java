@@ -71,10 +71,10 @@ public class Predefined {
      * @param symTabStack the symbol table stack to initialize.
      */
     private static void initializeStandardRoutines(SymTabStack symTabStack) {
-        readId = enterStandard(symTabStack, PROCEDURE, "read", READ);
-        readlnId = enterStandard(symTabStack, PROCEDURE, "readln", READLN);
-        writeId = enterStandard(symTabStack, PROCEDURE, "write", WRITE);
-        writelnId = enterStandard(symTabStack, PROCEDURE, "writeln", WRITELN);
+        readId = enterStandard(symTabStack, PROCEDURE, "dread", READ);
+        readlnId = enterStandard(symTabStack, PROCEDURE, "dreadln", READLN);
+        writeId = enterStandard(symTabStack, PROCEDURE, "dwrite", WRITE);
+        writelnId = enterStandard(symTabStack, PROCEDURE, "dwriteln", WRITELN);
         absId = enterStandard(symTabStack, FUNCTION, "abs", ABS);
         arctanId = enterStandard(symTabStack, FUNCTION, "arctan", ARCTAN);
         chrId = enterStandard(symTabStack, FUNCTION, "chr", CHR);
@@ -84,7 +84,7 @@ public class Predefined {
         expId = enterStandard(symTabStack, FUNCTION, "exp", EXP);
         lnId = enterStandard(symTabStack, FUNCTION, "ln", LN);
         oddId = enterStandard(symTabStack, FUNCTION, "odd", ODD);
-        ordId = enterStandard(symTabStack, FUNCTION, "ord", ODD);
+        ordId = enterStandard(symTabStack, FUNCTION, "ord", ORD);
         predId = enterStandard(symTabStack, FUNCTION, "pred", PRED);
         roundId = enterStandard(symTabStack, FUNCTION, "round", ROUND);
         sinId = enterStandard(symTabStack, FUNCTION, "sin", SIN);
